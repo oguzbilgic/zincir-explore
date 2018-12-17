@@ -34,9 +34,10 @@ const app = async () => {
   }
 
   setInterval(() => {
+    hashRate(block)
     const ago = Date.now()/1000 - block.timestamp
     document.getElementById('last-block-title').innerHTML = `Last Block: #${block.index} ${ago.toFixed()} seconds ago`
-  }, 1000)
+  }, 5000)
 }
 
 const nodes = async() => {
@@ -80,8 +81,8 @@ const nextDifficultyAdjustment = async (lastBlock) => {
 const hashRate = async (lastBlock) => {
   firstIndexWithDifficulty = lastBlock.index - lastBlock.index % 60
   firstBlock = await getBlock(firstIndexWithDifficulty)
-  elapsedTime = lastBlock.timestamp - firstBlock.timestamp
-  averageTime = elapsedTime / (lastBlock.index - firstBlock.index)
+  elapsedTime = Date.now()/1000 - firstBlock.timestamp
+  averageTime = elapsedTime / (1 + lastBlock.index - firstBlock.index)
 
   digitCount = lastBlock.difficulty.length
   hex = parseInt(lastBlock.difficulty, 16)
