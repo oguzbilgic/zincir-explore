@@ -39,7 +39,6 @@ const difficulty = async(lastBlock) => {
 
   let index = lastBlock.index
   while (index >= 0) {
-    console.log(index)
     block = await getBlock(index)
     difficulties.push(block.difficulty)
     index = index -60
@@ -55,6 +54,8 @@ const status = async() => {
 }
 
 const showLastBlock = async (lastBlock) => {
+  const ago = Date.now()/1000 - lastBlock.timestamp
+  document.getElementById('last-block-title').innerHTML = `Last Block: #${lastBlock.index} ${ago.toFixed()} seconds ago`
   document.getElementById('last-block').innerHTML = JSON.stringify(lastBlock, null, 2);
   hljs.initHighlighting();
 }
