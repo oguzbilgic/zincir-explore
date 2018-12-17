@@ -8,7 +8,8 @@ const lastBlock = async () => {
   const response = await fetch("http://localhost:9147/blocks")
   const lastBlock = await response.json()
 
-  document.getElementById('last-block').innerText = JSON.stringify(lastBlock, null, 2);
+  document.getElementById('last-block').innerHTML = JSON.stringify(lastBlock, null, 2);
+  hljs.initHighlighting();
 }
 
 const averageBlock = async (blockCount, id) => {
