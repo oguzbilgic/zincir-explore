@@ -9,6 +9,13 @@ const getBlock = async (index) => {
   return await response.json()
 }
 
+const calculateHashRate = (difficulty, averageTime) => {
+  digitCount = difficulty.length
+  hex = parseInt(difficulty, 16)
+  let diff = 16 ** digitCount / hex
+  return diff / averageTime
+}
+
 const render = async (block) => {
   status()
   difficulty(block)
@@ -53,11 +60,24 @@ const difficulty = async(lastBlock) => {
   let index = lastBlock.index
   while (index >= 0) {
     block = await getBlock(index)
-    difficulties.push(block.difficulty)
+    let hashRate = calculateHashRate(block.difficulty, 60)/1000
+    if (hashRate != Infinity) {
+      difficulties.push([index, hashRate])
+    } else {
+      difficulties.push([index, 0])
+    }
+
     index = index -60
   }
 
-  document.getElementById('difficulty').innerHTML = JSON.stringify(difficulties, null, 2);
+  new Dygraph(document.getElementById("difficulty"), difficulties.reverse(), {
+    ylabel: 'Network Hash Rate',
+    xlabel: 'Block Index',
+    labels: ["Block Index", "Hash Rate"]
+  });
+
+
+  // document.getElementById('difficulty').innerHTML = JSON.stringify(difficulties, null, 2);
 }
 
 const status = async() => {
@@ -84,10 +104,7 @@ const hashRate = async (lastBlock) => {
   elapsedTime = Date.now()/1000 - firstBlock.timestamp
   averageTime = elapsedTime / (1 + lastBlock.index - firstBlock.index)
 
-  digitCount = lastBlock.difficulty.length
-  hex = parseInt(lastBlock.difficulty, 16)
-  let difficulty = 16 ** digitCount / hex
-  let hashRate = difficulty / averageTime /1000
+  let hashRate = calculateHashRate(lastBlock.difficulty, averageTime) / 1000
 
   document.getElementById('hash-rate').innerText = `${hashRate.toFixed(3)} KH/sec`;
 }
