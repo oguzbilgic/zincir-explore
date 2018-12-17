@@ -1,18 +1,53 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
 
+<style>
+  code {
+    border-radius: 2px;
+  }
+  body {
+    font-family: monospace;
+  }
+  #right {
+    float: left;
+    margin-left: 25px;
+    padding-left: 25px;
+    border-left: 1px solid #c1c1c1;
+  }
+</style>
+
 <script type="text/javascript" src='./app.js'></script>
 
 <h1>Zincir Testnet</h1>
 
-<h3>Average Block Time - All</h3>
-<div id="time"> </div>
+<div style="float: left;">
+  <h3>Network</h3>
+  <div style=" color: #247f24;" id='status'></div>
 
-<h3>Average Block Time - Last 60</h3>
-<div id="60-time"> </div>
+  <h3>Average Block Time</h3>
+  <div id="6-time"> </div>
+  <div style="font-weight: bold;"id="60-time"> </div>
+  <div id="120-time"> </div>
+  <div id="time"> </div>
 
-<h3>Last Block</h3>
+  <h3>Difficutly Adjustment</h3>
+  <div id="next-difficulty-adjustment"> </div>
 
-<pre>
-  <code class='json' id="last-block"></code>
-</pre>
+  <h3>Active Public Nodes</h3>
+  <pre>
+    <code class='json' id="nodes"></code>
+  </pre>
+</div>
+
+
+<div id="right">
+  <h3>Last Block</h3>
+  <pre>
+    <code class='json' id="last-block"></code>
+  </pre>
+
+  <h3>Difficulty History</h3>
+  <pre>
+    <code class='json' id="difficulty"></code>
+  </pre>
+</div>
