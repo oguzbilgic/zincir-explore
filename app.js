@@ -9,8 +9,7 @@ const getBlock = async (index) => {
   return await response.json()
 }
 
-const render = async () => {
-  const block = await lastBlock();
+const render = async (block) => {
   status()
   difficulty(block)
   averageBlock(6, '6-time', block)
@@ -22,9 +21,21 @@ const render = async () => {
   nodes()
 }
 
-const app = () => {
-  render()
-  setInterval(render, 15000)
+const app = async () => {
+  let block = await lastBlock();
+  render(block)
+
+  const socket = new WebSocket("ws://testnet.zincir.xyz:9147/blocks");
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data)
+    block = data.block
+    render(block)
+  }
+
+  setInterval(() => {
+    const ago = Date.now()/1000 - block.timestamp
+    document.getElementById('last-block-title').innerHTML = `Last Block: #${block.index} ${ago.toFixed()} seconds ago`
+  }, 1000)
 }
 
 const nodes = async() => {
@@ -54,8 +65,6 @@ const status = async() => {
 }
 
 const showLastBlock = async (lastBlock) => {
-  const ago = Date.now()/1000 - lastBlock.timestamp
-  document.getElementById('last-block-title').innerHTML = `Last Block: #${lastBlock.index} ${ago.toFixed()} seconds ago`
   document.getElementById('last-block').innerHTML = JSON.stringify(lastBlock, null, 2);
   hljs.initHighlighting();
 }
