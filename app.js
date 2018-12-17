@@ -19,6 +19,7 @@ const render = async (block) => {
   nextDifficultyAdjustment(block)
   showLastBlock(block)
   nodes()
+  hashRate(block)
 }
 
 const app = async () => {
@@ -74,6 +75,20 @@ const nextDifficultyAdjustment = async (lastBlock) => {
 
   document.getElementById('next-difficulty-adjustment').innerHTML = `in ${blocks} blocks`
   hljs.initHighlighting();
+}
+
+const hashRate = async (lastBlock) => {
+  firstIndexWithDifficulty = lastBlock.index - lastBlock.index % 60
+  firstBlock = await getBlock(firstIndexWithDifficulty)
+  elapsedTime = lastBlock.timestamp - firstBlock.timestamp
+  averageTime = elapsedTime / (lastBlock.index - firstBlock.index)
+
+  digitCount = lastBlock.difficulty.length
+  hex = parseInt(lastBlock.difficulty, 16)
+  let difficulty = 16 ** digitCount / hex
+  let hashRate = difficulty / averageTime /1000
+
+  document.getElementById('hash-rate').innerText = `${hashRate.toFixed(3)} KH/sec`;
 }
 
 const averageBlock = async (blockCount, id, lastBlock) => {
