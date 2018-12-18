@@ -63,22 +63,20 @@ const difficulty = async(lastBlock) => {
     block = await getBlock(index)
     let hashRate = calculateHashRate(block.difficulty, 60)/1000
     if (hashRate != Infinity) {
-      difficulties.push([index, hashRate])
+      difficulties.push([new Date(block.timestamp*1000), hashRate])
     } else {
-      difficulties.push([index, 0])
+      difficulties.push([new Date(block.timestamp*1000), 0])
     }
 
     index = index -60
   }
 
   new Dygraph(document.getElementById("difficulty"), difficulties.reverse(), {
-    ylabel: 'Network Hash Rate',
-    xlabel: 'Block Index',
+    title: 'Network Hash Rate',
+    titleHeight: 24,
+    ylabel: 'Kh/sec',
     labels: ["Block Index", "Hash Rate"]
   });
-
-
-  // document.getElementById('difficulty').innerHTML = JSON.stringify(difficulties, null, 2);
 }
 
 const status = async() => {
@@ -106,7 +104,7 @@ const hashRate = async (lastBlock) => {
 
   let hashRate = calculateHashRate(lastBlock.difficulty, averageTime) / 1000
 
-  document.title =`#${lastBlock.index} - ${hashRate.toFixed(2)} Kh - Zincir TestNet`
+  document.title =`${hashRate.toFixed(2)} Kh - #${lastBlock.index} - Zincir TestNet`
   document.getElementById('hash-rate').innerText = `${hashRate.toFixed(2)} Kh/sec`;
 }
 
