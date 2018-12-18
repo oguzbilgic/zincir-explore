@@ -35,6 +35,7 @@ const app = async () => {
 
   const socket = new WebSocket(`ws://${HOST}/blocks`);
   socket.onmessage = (event) => {
+    document.getElementById('alert').play()
     const data = JSON.parse(event.data)
     block = data.block
     render(block)
