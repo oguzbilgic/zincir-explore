@@ -1,11 +1,11 @@
 HOST = "testnet.zincir.xyz:9147"
 const lastBlock = async () => {
-  const response = await fetch("http://testnet.zincir.xyz:9147/blocks")
+  const response = await fetch(`http://${HOST}/blocks`)
   return await response.json()
 }
 
 const getBlock = async (index) => {
-  const response = await fetch(`http://testnet.zincir.xyz:9147/blocks/${index}`)
+  const response = await fetch(`http://${HOST}/blocks/${index}`)
   return await response.json()
 }
 
@@ -33,7 +33,7 @@ const app = async () => {
   let block = await lastBlock();
   render(block)
 
-  const socket = new WebSocket("ws://testnet.zincir.xyz:9147/blocks");
+  const socket = new WebSocket(`ws://${HOST}/blocks`);
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data)
     block = data.block
@@ -48,7 +48,7 @@ const app = async () => {
 }
 
 const nodes = async() => {
-  const response = await fetch("http://testnet.zincir.xyz:9147/nodes")
+  const response = await fetch(`http://${HOST}/nodes`)
   let nodes = await response.json()
   nodes.push(HOST)
   document.getElementById('nodes').innerHTML = JSON.stringify(nodes, null, 2);
@@ -111,7 +111,7 @@ const hashRate = async (lastBlock) => {
 const averageBlock = async (blockCount, id, lastBlock) => {
   const first = blockCount == -1? 1 : lastBlock.index - blockCount
 
-  const response2 = await fetch(`http://testnet.zincir.xyz:9147/blocks/${first}`)
+  const response2 = await fetch(`http://${HOST}/blocks/${first}`)
   const block2 = await response2.json()
 
   const average = (lastBlock.timestamp - block2.timestamp)/(lastBlock.index-first)
