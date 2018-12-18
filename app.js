@@ -106,7 +106,8 @@ const hashRate = async (lastBlock) => {
 
   let hashRate = calculateHashRate(lastBlock.difficulty, averageTime) / 1000
 
-  document.getElementById('hash-rate').innerText = `${hashRate.toFixed(3)} KH/sec`;
+  document.title =`#${lastBlock.index} - ${hashRate.toFixed(2)} Kh - Zincir TestNet`
+  document.getElementById('hash-rate').innerText = `${hashRate.toFixed(2)} Kh/sec`;
 }
 
 const averageBlock = async (blockCount, id, lastBlock) => {
