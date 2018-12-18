@@ -95,7 +95,6 @@ const nextDifficultyAdjustment = async (lastBlock) => {
   const blocks = 60 - (lastBlock.index % 60)
 
   document.getElementById('next-difficulty-adjustment').innerHTML = `in ${blocks} blocks`
-  hljs.initHighlighting();
 }
 
 const hashRate = async (lastBlock) => {
