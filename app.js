@@ -29,7 +29,6 @@ const calculateHashRate = (difficulty, averageTime) => {
 
 const render = async (block) => {
   status()
-  difficulty(block)
   averageBlock(6, '6-time', block)
   averageBlock(60, '60-time', block)
   averageBlock(120, '120-time', block)
@@ -43,6 +42,7 @@ const render = async (block) => {
 const app = async () => {
   let block = await lastBlock();
   render(block)
+  difficultyChart(block)
 
   const socket = new WebSocket(`ws://${HOST}/blocks`);
   socket.onmessage = (event) => {
@@ -66,7 +66,7 @@ const nodes = async() => {
   document.getElementById('nodes').innerHTML = JSON.stringify(nodes, null, 2);
 }
 
-const difficulty = async(lastBlock) => {
+const difficultyChart = async(lastBlock) => {
   const difficulties = []
 
   let index = lastBlock.index
