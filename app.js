@@ -1,12 +1,23 @@
 HOST = "testnet.zincir.xyz:9147"
+// HOST = "localhost:9147"
+
+const blockCache = {}
+
 const lastBlock = async () => {
   const response = await fetch(`http://${HOST}/blocks`)
   return await response.json()
 }
 
 const getBlock = async (index) => {
+  if (blockCache[index]) {
+    console.log(`Using cached block for ${index}`)
+    return blockCache[index]
+  }
+
   const response = await fetch(`http://${HOST}/blocks/${index}`)
-  return await response.json()
+  const block =  await response.json()
+  blockCache[index] = block
+  return block
 }
 
 const calculateHashRate = (difficulty, averageTime) => {
