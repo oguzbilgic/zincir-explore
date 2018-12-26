@@ -8,6 +8,13 @@ const lastBlock = async () => {
   return await response.json()
 }
 
+const getBlocks = async (indexes) => {
+  indexes = indexes.join(',')
+
+  const response = await fetch(`http://${HOST}/blocks/${indexes}`)
+  return await response.json()
+}
+
 const getBlock = async (index) => {
   if (blockCache[index]) {
     console.log(`Using cached block for ${index}`)
@@ -70,17 +77,24 @@ const difficultyChart = async(lastBlock) => {
   const difficulties = []
 
   let index = lastBlock.index
+  const indexes = [];
+
   while (index >= 0) {
-    block = await getBlock(index)
+    indexes.push(index)
+    index = index -60
+  }
+
+  const blocks = await getBlocks(indexes)
+
+  blocks.map(block => {
     let hashRate = calculateHashRate(block.difficulty, 60)/1000
+
     if (hashRate != Infinity) {
       difficulties.push([new Date(block.timestamp*1000), hashRate])
     } else {
       difficulties.push([new Date(block.timestamp*1000), 0])
     }
-
-    index = index -60
-  }
+  })
 
   new Dygraph(document.getElementById("difficulty"), difficulties.reverse(), {
     title: 'Network Hash Rate',
